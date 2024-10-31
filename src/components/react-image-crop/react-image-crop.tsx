@@ -11,8 +11,8 @@ const cropDefault = {
 };
 
 const PANEL_SIZE = {
-  width: 350,
-  height: 350,
+  width: 600,
+  height: 500,
 };
 
 export default function ReactImageCrop() {
@@ -23,6 +23,16 @@ export default function ReactImageCrop() {
   const imageUrl = useMemo(() => {
     return image && URL.createObjectURL(image);
   }, [image]);
+
+  const download = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const url = canvas.toDataURL("image/png");
+    const link = document.createElement("a");
+    link.download = `cropped-${image?.name}`;
+    link.href = url;
+    link.click();
+  };
 
   const crop = () => {
     if (!canvasRef.current || !imageUrl) return;
@@ -69,8 +79,6 @@ export default function ReactImageCrop() {
 
       canvas.width = scaledCrop.width;
       canvas.height = scaledCrop.height;
-
-      console.log(image.naturalWidth, image.naturalHeight);
 
       // Draw the cropped portion of the image
       ctx.drawImage(
@@ -122,16 +130,19 @@ export default function ReactImageCrop() {
       </div>
 
       {image && (
-        <canvas
-          className="bg-red-50"
-          style={{
-            width: `${PANEL_SIZE.width}px`,
-            height: `${PANEL_SIZE.height}px`,
-          }}
-          ref={canvasRef}
-          width={PANEL_SIZE.width}
-          height={PANEL_SIZE.height}
-        />
+        <>
+          <canvas
+            className="bg-red-50"
+            style={{
+              width: `${PANEL_SIZE.width}px`,
+              height: `${PANEL_SIZE.height}px`,
+            }}
+            ref={canvasRef}
+            width={PANEL_SIZE.width}
+            height={PANEL_SIZE.height}
+          />
+          <Button onClick={download}>Download</Button>
+        </>
       )}
     </div>
   );
