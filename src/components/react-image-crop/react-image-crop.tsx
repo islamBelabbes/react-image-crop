@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import ImageUpload from "../image-uploader";
 import { Rnd } from "react-rnd";
+import { cn } from "@/lib/utils";
 
 const cropDefault = {
   x: 165,
@@ -17,14 +18,17 @@ const PANEL_SIZE = {
 
 export default function ReactImageCrop() {
   const [image, setImage] = useState<File | null>(null);
+  const [hasCropped, setHasCropped] = useState(false);
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const RndRef = useRef<InstanceType<typeof Rnd>>(null);
 
-  const imageUrl = useMemo(() => {
-    return image && URL.createObjectURL(image);
-  }, [image]);
+  const handleImageUpload = (e: File) => {
+    setImage(e);
+    setHasCropped(false);
+  };
 
-  const download = () => {
+  const handleDownload = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const url = canvas.toDataURL("image/png");
@@ -34,7 +38,7 @@ export default function ReactImageCrop() {
     link.click();
   };
 
-  const crop = () => {
+  const handleCrop = () => {
     if (!canvasRef.current || !imageUrl) return;
 
     const image = new Image();
@@ -92,9 +96,13 @@ export default function ReactImageCrop() {
         canvas.width,
         canvas.height
       );
+      return setHasCropped(true);
     };
   };
 
+  const imageUrl = useMemo(() => {
+    return image && URL.createObjectURL(image);
+  }, [image]);
   return (
     <div
       className="flex flex-col gap-2"
@@ -125,12 +133,16 @@ export default function ReactImageCrop() {
       )}
 
       <div className="flex flex-col gap-1">
-        <ImageUpload image={image} setImage={setImage} />
-        {image && <Button onClick={crop}>Crop Image</Button>}
+        <ImageUpload image={image} setImage={handleImageUpload} />
+        {image && <Button onClick={handleCrop}>Crop Image</Button>}
       </div>
 
       {image && (
-        <>
+        <div
+          className={cn({
+            hidden: !hasCropped,
+          })}
+        >
           <canvas
             className="bg-red-50"
             style={{
@@ -141,8 +153,10 @@ export default function ReactImageCrop() {
             width={PANEL_SIZE.width}
             height={PANEL_SIZE.height}
           />
-          <Button onClick={download}>Download</Button>
-        </>
+          <Button onClick={handleDownload} className="mt-2 w-full">
+            Download
+          </Button>
+        </div>
       )}
     </div>
   );
