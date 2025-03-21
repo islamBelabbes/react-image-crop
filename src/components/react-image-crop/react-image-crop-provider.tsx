@@ -43,7 +43,7 @@ function ReactImageCropProvider({ children }: { children: React.ReactNode }) {
   const [image, setImage] = useState<TImage | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [options, setOptions] = useState(defaultOptions);
-  const [scaleFactor, setScaleFactor] = useState(2);
+  const [scaleFactor, _] = useState(2);
 
   const handleCrop = async () => {
     const canvas = canvasRef.current;
@@ -73,8 +73,8 @@ function ReactImageCropProvider({ children }: { children: React.ReactNode }) {
       height: cropBox.height * scaleFactor,
     };
 
-    canvas.width = scaledCrop.width;
-    canvas.height = scaledCrop.height;
+    canvas.width = options.original ? scaledCrop.width : cropBox.width;
+    canvas.height = options.original ? scaledCrop.height : cropBox.height;
 
     // Draw the cropped portion of the image
     ctx.drawImage(
