@@ -3,14 +3,13 @@ import { useMemo, useRef } from "react";
 import { useReactImageCrop } from "./react-image-crop-provider";
 
 function Canvas() {
-  const { image, canvasRef, options, setOptions, scaleFactor } =
-    useReactImageCrop();
+  const { image, options, setOptions, scaleFactor } = useReactImageCrop();
   const url = useMemo(() => image && URL.createObjectURL(image.file), [image]);
   const ref = useRef<Rnd>(null);
 
   if (!image || !url) return null;
   return (
-    <div className="h-full border  w-full flex justify-center items-center relative">
+    <div className="h-full border  w-full flex justify-center items-center relative lg:py-0 py-2">
       <div
         className="relative overflow-hidden max-h-full max-w-full"
         style={{
@@ -54,8 +53,6 @@ function Canvas() {
           />
         </div>
       </div>
-
-      <canvas hidden ref={canvasRef} />
     </div>
   );
 }

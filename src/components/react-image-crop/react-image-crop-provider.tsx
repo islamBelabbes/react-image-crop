@@ -24,7 +24,6 @@ type TContext = {
   handleCrop: () => void;
   options: TOptions;
   setOptions: React.Dispatch<React.SetStateAction<TOptions>>;
-  canvasRef: React.RefObject<HTMLCanvasElement | null>;
   scaleFactor: number;
   imageUploadRef: React.RefObject<HTMLInputElement | null>;
 };
@@ -54,18 +53,16 @@ function ReactImageCropProvider({ children }: { children: React.ReactNode }) {
   const [options, setOptions] = useState(defaultOptions);
   const [scaleFactor, setScaleFactor] = useState(0);
 
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const imageUploadRef = useRef<HTMLInputElement | null>(null);
 
   const { width, height } = useWindowSize();
 
   const handleCrop = async () => {
-    const canvas = canvasRef.current;
-    const ctx = canvas?.getContext("2d");
-    const url = image && URL.createObjectURL(image.file);
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    if (!image || !ctx) return;
 
-    if (!canvas || !ctx || !url) return;
-
+    const url = URL.createObjectURL(image.file);
     const img = new Image();
     img.src = url;
     await new Promise((resolve) => (img.onload = resolve));
@@ -134,7 +131,6 @@ function ReactImageCropProvider({ children }: { children: React.ReactNode }) {
     handleCrop,
     options,
     setOptions,
-    canvasRef,
     scaleFactor,
     imageUploadRef,
   };
