@@ -39,7 +39,6 @@ function Options() {
         x + width === image.width / scaleFactor
       ) {
         const diff = value - width;
-        width = Math.min(value, maxValues.width);
         x = Math.max(x - diff, minValues.x);
       }
 
@@ -50,7 +49,6 @@ function Options() {
         y + height === image.height / scaleFactor
       ) {
         const diff = value - height;
-        height = Math.min(value, maxValues.height);
         y = Math.max(y - diff, minValues.y);
       }
 
@@ -58,12 +56,6 @@ function Options() {
         ...prev,
         x,
         y,
-        width: Math.floor(
-          Math.min(Math.max(width, minValues.width), maxValues.width)
-        ),
-        height: Math.floor(
-          Math.min(Math.max(height, minValues.height), maxValues.height)
-        ),
         [key]: Math.floor(
           Math.min(Math.max(value, minValues[key]), maxValues[key])
         ),
