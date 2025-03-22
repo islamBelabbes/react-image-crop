@@ -5,47 +5,29 @@ import ImageUpload from "../image-upload";
 import Canvas from "./canvas";
 import SideBar from "./side-bar";
 import Options from "./options";
-import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
+import Actions from "./actions";
 
 const ReactImageCropContent = () => {
-  const { image, setImage, handleCrop, imageUploadRef } = useReactImageCrop();
+  const { image, setImage, imageUploadRef } = useReactImageCrop();
 
-  const disabled = !image;
   return (
-    <div className="flex w-full">
+    <div className="flex w-full flex-col lg:flex-row">
       <div className="bg-muted/20 grow flex items-center justify-center flex-col lg:flex-row">
-        {image && <Canvas />}
+        <Canvas />
 
         <ImageUpload
           setImage={setImage}
           ref={imageUploadRef}
           className={cn({
-            "opacity-0 size-0": image,
+            hidden: image,
           })}
         />
       </div>
 
       <SideBar>
         <Options />
-
-        <Button
-          onClick={handleCrop}
-          className="w-full mt-2"
-          disabled={disabled}
-        >
-          Download Cropped Image
-        </Button>
-
-        {image && (
-          <Button
-            onClick={() => imageUploadRef.current?.click()}
-            className="w-full mt-2"
-            variant={"secondary"}
-          >
-            upload new image
-          </Button>
-        )}
+        <Actions />
       </SideBar>
     </div>
   );
