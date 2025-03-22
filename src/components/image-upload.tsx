@@ -50,7 +50,7 @@ export default function ImageUpload({
     multiple: false,
   });
 
-  useImperativeHandle(ref, () => inputRef.current);
+  useImperativeHandle(ref, () => inputRef.current, []);
 
   return (
     <div
