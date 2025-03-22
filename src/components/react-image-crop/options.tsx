@@ -34,17 +34,17 @@ function Options() {
 
       const minValues = { width: 1, height: 1, x: 0, y: 0 };
       const maxValues = {
-        width: image.width / scaleFactor - x,
-        height: image.height / scaleFactor - y,
-        x: image.width / scaleFactor - width,
-        y: image.height / scaleFactor - height,
+        width: Math.floor(image.width / scaleFactor - x),
+        height: Math.floor(image.height / scaleFactor - y),
+        x: Math.floor(image.width / scaleFactor - width),
+        y: Math.floor(image.height / scaleFactor - height),
       };
 
       // Only shift x when increasing width
       if (
         key === "width" &&
         value > width &&
-        x + width === image.width / scaleFactor
+        x + width === Math.floor(image.width / scaleFactor)
       ) {
         const diff = value - width;
         x = Math.max(x - diff, minValues.x);
@@ -54,7 +54,7 @@ function Options() {
       if (
         key === "height" &&
         value > height &&
-        y + height === image.height / scaleFactor
+        y + height === Math.floor(image.height / scaleFactor)
       ) {
         const diff = value - height;
         y = Math.max(y - diff, minValues.y);

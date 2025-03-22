@@ -14,8 +14,8 @@ function Canvas() {
       <div
         className="relative overflow-hidden max-h-full max-w-full"
         style={{
-          width: image.width / scaleFactor,
-          height: image.height / scaleFactor,
+          width: Math.floor(image.width / scaleFactor),
+          height: Math.floor(image.height / scaleFactor),
           maxHeight: "100vh",
           maxWidth: "100vw",
         }}
@@ -38,9 +38,9 @@ function Canvas() {
             minWidth={1}
             className="border-2 border-white border-dotted crop-overlay"
             bounds={"parent"}
-            onDragStop={(_, data) =>
-              setOptions((prev) => ({ ...prev, ...data }))
-            }
+            onDragStop={(_, { x, y }) => {
+              setOptions((prev) => ({ ...prev, x, y }));
+            }}
             onResizeStop={(_, __, ref, ___, position) => {
               const width = +ref.style.width.split("px")[0] || 0;
               const height = +ref.style.height.split("px")[0] || 0;
