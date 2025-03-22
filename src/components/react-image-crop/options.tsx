@@ -134,13 +134,15 @@ function Options() {
                 <TooltipTrigger className="bg-gray-50 rounded-full p-[1px]">
                   <QuestionMarkIcon className="size-[10px] stroke-secondary" />
                 </TooltipTrigger>
-                <TooltipContent>
-                  <p>
-                    This Option if checked will Crop the original image size u
-                    uploaded ({`${image?.width}x${image?.height}`}) otherwise it
-                    will crop the image shown in the canvas
-                  </p>
-                </TooltipContent>
+                {!disabled && (
+                  <TooltipContent>
+                    <p>
+                      This Option if checked will Crop the original image size u
+                      uploaded ({`${image?.width}x${image?.height}`}) otherwise
+                      it will crop the image shown in the canvas
+                    </p>
+                  </TooltipContent>
+                )}
               </Tooltip>
             </TooltipProvider>
           </div>
