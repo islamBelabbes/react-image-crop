@@ -1,6 +1,6 @@
 import { Rnd } from "react-rnd";
-import { useReactImageCrop } from "./react-image-crop-provider";
 import { useMemo, useRef } from "react";
+import { useReactImageCrop } from "./react-image-crop-provider";
 
 function Canvas() {
   const { image, canvasRef, options, setOptions, scaleFactor } =
@@ -14,8 +14,8 @@ function Canvas() {
       <div
         className="relative overflow-hidden max-h-full max-w-full"
         style={{
-          width: Math.floor(image.width / scaleFactor),
-          height: Math.floor(image.height / scaleFactor),
+          width: Math.floor(image.width * scaleFactor),
+          height: Math.floor(image.height * scaleFactor),
           maxHeight: "100vh",
           maxWidth: "100vw",
         }}

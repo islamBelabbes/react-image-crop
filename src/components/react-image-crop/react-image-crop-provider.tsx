@@ -2,10 +2,13 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useRef,
   useState,
 } from "react";
-import { TImage } from "../image-upload";
+import { getScaledDimensions } from "@/lib/utils";
+import { useWindowSize } from "@/hooks/use-window-size";
+import { TImage } from "@/components/image-upload";
 
 export type TOptions = {
   original: boolean;
@@ -48,10 +51,13 @@ const defaultOptions: TOptions = {
 
 function ReactImageCropProvider({ children }: { children: React.ReactNode }) {
   const [image, setImage] = useState<TImage | null>(null);
+  const [options, setOptions] = useState(defaultOptions);
+  const [scaleFactor, setScaleFactor] = useState(0);
+
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const imageUploadRef = useRef<HTMLInputElement | null>(null);
-  const [options, setOptions] = useState(defaultOptions);
-  const [scaleFactor, _] = useState(2);
+
+  const { width, height } = useWindowSize();
 
   const handleCrop = async () => {
     const canvas = canvasRef.current;
@@ -75,10 +81,10 @@ function ReactImageCropProvider({ children }: { children: React.ReactNode }) {
 
     // Scale crop coordinates to match original image dimensions
     const scaledCrop = {
-      x: cropBox.x * scaleFactor,
-      y: cropBox.y * scaleFactor,
-      width: cropBox.width * scaleFactor,
-      height: cropBox.height * scaleFactor,
+      x: cropBox.x / scaleFactor,
+      y: cropBox.y / scaleFactor,
+      width: cropBox.width / scaleFactor,
+      height: cropBox.height / scaleFactor,
     };
 
     canvas.width = options.original ? scaledCrop.width : cropBox.width;
@@ -111,8 +117,16 @@ function ReactImageCropProvider({ children }: { children: React.ReactNode }) {
 
   const _setImage = useCallback((image: TImage) => {
     setOptions(defaultOptions);
+    setScaleFactor(getScaledDimensions(image));
     return setImage(image);
   }, []);
+
+  useEffect(() => {
+    if (image) {
+      setScaleFactor(getScaledDimensions(image));
+      setOptions(defaultOptions);
+    }
+  }, [width, height]);
 
   const values = {
     image,
