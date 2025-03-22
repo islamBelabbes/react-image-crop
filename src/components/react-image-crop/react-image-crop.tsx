@@ -28,7 +28,7 @@ const ReactImageCropContent = () => {
 
       <SideBar>
         <Options />
-        {image?.width}
+
         <Button
           onClick={handleCrop}
           className="w-full mt-2"
@@ -39,13 +39,9 @@ const ReactImageCropContent = () => {
 
         {image && (
           <Button
-            onClick={() => {
-              console.log(imageUploadRef);
-              console.log(imageUploadRef.current);
-
-              imageUploadRef.current?.click();
-            }}
+            onClick={() => imageUploadRef.current?.click()}
             className="w-full mt-2"
+            variant={"secondary"}
           >
             upload new image
           </Button>
