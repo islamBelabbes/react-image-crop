@@ -10,6 +10,7 @@ import { Button } from "../ui/button";
 const ReactImageCropContent = () => {
   const { image, setImage, handleCrop } = useReactImageCrop();
 
+  const disabled = !image;
   return (
     <div className="flex w-full">
       <div className="bg-muted/20 grow flex items-center justify-center flex-col lg:flex-row">
@@ -18,7 +19,11 @@ const ReactImageCropContent = () => {
 
       <SideBar>
         <Options />
-        <Button onClick={handleCrop} className="w-full mt-2">
+        <Button
+          onClick={handleCrop}
+          className="w-full mt-2"
+          disabled={disabled}
+        >
           Download Cropped Image
         </Button>
       </SideBar>

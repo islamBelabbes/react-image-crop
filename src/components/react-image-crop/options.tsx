@@ -2,8 +2,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { TOptions, useReactImageCrop } from "./react-image-crop-provider";
 import { CheckedState } from "@radix-ui/react-checkbox";
+import { QuestionMarkIcon } from "@radix-ui/react-icons";
+import { cn } from "@/lib/utils";
 
 type TKey = Exclude<keyof TOptions, "original">;
 
@@ -63,8 +71,13 @@ function Options() {
     });
   };
 
+  const disabled = !image;
   return (
-    <Card>
+    <Card
+      className={cn({
+        "opacity-50 pointer-events-none select-none": !image,
+      })}
+    >
       <CardHeader>
         <CardTitle>Crop Options</CardTitle>
       </CardHeader>
@@ -72,6 +85,7 @@ function Options() {
         <div className="space-y-2">
           <Label htmlFor="width">Width</Label>
           <Input
+            disabled={disabled}
             type="number"
             id="width"
             placeholder="Width"
@@ -82,6 +96,7 @@ function Options() {
         <div className="space-y-2">
           <Label htmlFor="height">Height</Label>
           <Input
+            disabled={disabled}
             type="number"
             id="height"
             placeholder="Height"
@@ -92,6 +107,7 @@ function Options() {
         <div className="space-y-2">
           <Label htmlFor="x">X Position</Label>
           <Input
+            disabled={disabled}
             type="number"
             id="x"
             placeholder="X"
@@ -102,6 +118,7 @@ function Options() {
         <div className="space-y-2">
           <Label htmlFor="y">Y Position</Label>
           <Input
+            disabled={disabled}
             type="number"
             id="y"
             placeholder="Y"
@@ -110,8 +127,26 @@ function Options() {
           />
         </div>
         <div className="flex items-center justify-between">
-          <Label htmlFor="original">Crop Original Image?</Label>
+          <div className="flex gap-1 items-center">
+            <Label htmlFor="original">Crop Original Image?</Label>
+            <TooltipProvider>
+              <Tooltip delayDuration={50}>
+                <TooltipTrigger className="bg-gray-50 rounded-full p-[1px]">
+                  <QuestionMarkIcon className="size-[10px] stroke-secondary" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>
+                    This Option if checked will Crop the original image size u
+                    uploaded ({`${image?.width}x${image?.height}`}) otherwise it
+                    will crop the image shown in the canvas
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+
           <Checkbox
+            disabled={disabled}
             id="original"
             className="mt-0"
             checked={options.original}
