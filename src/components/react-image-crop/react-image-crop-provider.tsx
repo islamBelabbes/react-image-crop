@@ -1,4 +1,10 @@
-import { createContext, useContext, useRef, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useRef,
+  useState,
+} from "react";
 import { TImage } from "../image-upload";
 
 export type TOptions = {
@@ -17,6 +23,7 @@ type TContext = {
   setOptions: React.Dispatch<React.SetStateAction<TOptions>>;
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
   scaleFactor: number;
+  imageUploadRef: React.RefObject<HTMLInputElement | null>;
 };
 
 const ReactImageCropContent = createContext<TContext | null>(null);
@@ -41,7 +48,8 @@ const defaultOptions: TOptions = {
 
 function ReactImageCropProvider({ children }: { children: React.ReactNode }) {
   const [image, setImage] = useState<TImage | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const imageUploadRef = useRef<HTMLInputElement | null>(null);
   const [options, setOptions] = useState(defaultOptions);
   const [scaleFactor, _] = useState(2);
 
@@ -101,14 +109,20 @@ function ReactImageCropProvider({ children }: { children: React.ReactNode }) {
     document.body.removeChild(link);
   };
 
+  const _setImage = useCallback((image: TImage) => {
+    setOptions(defaultOptions);
+    return setImage(image);
+  }, []);
+
   const values = {
     image,
-    setImage,
+    setImage: _setImage,
     handleCrop,
     options,
     setOptions,
     canvasRef,
     scaleFactor,
+    imageUploadRef,
   };
 
   return (

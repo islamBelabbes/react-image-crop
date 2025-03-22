@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { ImageIcon, Upload } from "lucide-react";
-import { useCallback } from "react";
+import { useCallback, useImperativeHandle } from "react";
 import { useDropzone } from "react-dropzone";
 
 export type TImage = {
@@ -11,9 +12,15 @@ export type TImage = {
 
 type TImageUploadProps = {
   setImage: (image: { file: File; width: number; height: number }) => void;
+  ref?: React.RefObject<HTMLInputElement | null>;
+  className?: string;
 };
 
-export default function ImageUpload({ setImage }: TImageUploadProps) {
+export default function ImageUpload({
+  setImage,
+  ref,
+  className,
+}: TImageUploadProps) {
   const getImageDimensions = (
     file: File
   ): Promise<{ width: number; height: number }> => {
@@ -35,7 +42,7 @@ export default function ImageUpload({ setImage }: TImageUploadProps) {
     setImage({ file, width, height });
   }, []);
 
-  const { getRootProps, getInputProps } = useDropzone({
+  const { getRootProps, getInputProps, inputRef } = useDropzone({
     onDrop,
     accept: {
       "image/png": [".png", ".jpg", ".jpeg"],
@@ -43,11 +50,15 @@ export default function ImageUpload({ setImage }: TImageUploadProps) {
     multiple: false,
   });
 
+  useImperativeHandle(ref, () => inputRef.current);
+
   return (
     <div
       {...getRootProps({
-        className:
+        className: cn(
           "dropzone w-full max-w-3xl h-[500px] flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-muted-foreground/25 bg-muted/10 p-8 text-center transition-colors hover:border-muted-foreground/50",
+          className
+        ),
       })}
     >
       <div className="flex flex-col items-center justify-center space-y-4">
