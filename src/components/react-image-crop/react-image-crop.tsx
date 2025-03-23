@@ -12,8 +12,8 @@ const ReactImageCropContent = () => {
   const { image, setImage, imageUploadRef } = useReactImageCrop();
 
   return (
-    <div className="flex w-full flex-col lg:flex-row">
-      <div className="bg-muted/20 grow flex items-center justify-center flex-col lg:flex-row">
+    <div className="flex w-full flex-col xl:flex-row">
+      <div className="bg-muted/20 grow flex items-center justify-center flex-row">
         <Canvas />
 
         <ImageUpload
