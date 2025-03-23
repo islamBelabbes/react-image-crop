@@ -1,11 +1,10 @@
 import { Rnd } from "react-rnd";
-import { useMemo, useRef } from "react";
+import { useMemo } from "react";
 import { useReactImageCrop } from "./react-image-crop-provider";
 
 function Canvas() {
   const { image, options, setOptions, scaleFactor } = useReactImageCrop();
   const url = useMemo(() => image && URL.createObjectURL(image.file), [image]);
-  const ref = useRef<Rnd>(null);
 
   if (!image || !url) return null;
   return (
@@ -23,7 +22,6 @@ function Canvas() {
 
         <div className="absolute inset-0 w-full h-full">
           <Rnd
-            ref={ref}
             position={{
               x: options.x,
               y: options.y,

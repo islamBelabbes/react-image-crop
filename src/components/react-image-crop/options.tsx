@@ -27,7 +27,7 @@ function Options() {
   ) => {
     if (!image) return;
 
-    const value = +e.target.value;
+    const value = +e.target.value || 0;
 
     setOptions((prev) => {
       let { width, height, x, y } = prev;
