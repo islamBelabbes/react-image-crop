@@ -120,10 +120,19 @@ function ReactImageCropProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (image) {
-      setScaleFactor(getScaledDimensions(image));
-      setOptions(defaultOptions);
+      const newScaleFactor = getScaledDimensions(image);
+      const scaleRatio = newScaleFactor / scaleFactor;
+
+      setScaleFactor(newScaleFactor);
+      setOptions((prev) => ({
+        ...prev,
+        x: Math.floor(prev.x * scaleRatio),
+        y: Math.floor(prev.y * scaleRatio),
+        width: Math.floor(prev.width * scaleRatio),
+        height: Math.floor(prev.height * scaleRatio),
+      }));
     }
-  }, [width, height]);
+  }, [width, height, image]);
 
   const values = {
     image,
